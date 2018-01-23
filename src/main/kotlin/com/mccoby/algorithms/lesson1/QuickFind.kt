@@ -15,11 +15,18 @@ class QuickFind(private val ids: Array<Int>): UnionFind {
         val pId = ids[p]
         val qId = ids[q]
 
-        for (i in ids.indices) {
-            if (ids[i] == pId) {
-                ids[i] = qId
-            }
-        }
+        /**
+         *
+         *  for (i in ids.indices) {
+         *      if (ids[i] == pId) {
+         *          ids[i] = qId
+         *      }
+         *   }
+         */
+
+        ids.indices.filter { ids[it] == pId }
+                .forEach {ids[it] = qId}
+
     }
 
     /**
