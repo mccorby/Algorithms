@@ -1,0 +1,10 @@
+# Algorithms Part I
+This repository includes the code examples and exercises provided in the course "Algorithms" from Princeton University in Coursera
+This is a must course to do taught by Robert Sedgewick and Kevin Wayne.
+
+The code is written in Kotlin. This is a difference with the language used in the course (Java). This way the practice is double 
+
+### NOTES
+
+In order to show how some algorithms are built, the idiomatic Kotlin equivalent is, sometimes, missing
+Where possible, the Kotlin idiom is implemented alongside a comment with the original code

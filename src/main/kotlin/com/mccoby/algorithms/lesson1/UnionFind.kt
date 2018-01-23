@@ -1,4 +1,4 @@
-package com.mccorby.algorithms.lesson1
+package com.mccoby.algorithms.lesson1
 
 /*
 We assume "is connected to" is an equivalence relation:
@@ -11,7 +11,8 @@ Operations:
 - Find query. Check if two objects are in the same component.
 - Union command. Replace components containing two objects with their union.
  */
-interface UnionFind {
-    fun union(p: Int, q: Int)
-    fun connected(p: Int, q: Int): Boolean
+abstract class UnionFind(private val ids: Array<Int>) {
+    abstract fun union(p: Int, q: Int)
+    abstract fun connected(p: Int, q: Int): Boolean
+
 }
