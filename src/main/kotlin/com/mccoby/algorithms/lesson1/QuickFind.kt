@@ -1,6 +1,6 @@
 package com.mccoby.algorithms.lesson1
 
-/*
+/**
  - Integer array id[] of length N.
  - Interpretation: p and q are connected iff they have the same id
 
