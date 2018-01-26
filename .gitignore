@@ -80,3 +80,5 @@ hs_err_pid*
 /.gradle/
 /gradle/
 /build/
+/src/main/java/percolation/
+/TestingCode/src/
