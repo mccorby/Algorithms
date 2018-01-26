@@ -1,7 +1,5 @@
 package com.mccoby.algorithms.lesson1
 
-import com.sun.xml.internal.xsom.XSWildcard
-
 /**
  * - Integer array id[] of length N.
  * - Interpretation: Each entry in the array contains a reference to its parent in the tree
