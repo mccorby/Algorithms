@@ -96,7 +96,7 @@ internal class PercolationTest {
         val initSize = 10
         val row = 1
         val col = 1
-        val expectedValue = 0
+        val expectedValue = 1
 
         // When
         val cut = Percolation(initSize)
@@ -112,7 +112,7 @@ internal class PercolationTest {
         val initSize = 10
         val row = 2
         val col = 2
-        val expected = 11
+        val expected = 12
 
         // When
         val cut = Percolation(initSize)
@@ -128,7 +128,7 @@ internal class PercolationTest {
         val initSize = 10
         val row = 10
         val col = 10
-        val expected = 99
+        val expected = 100
 
         // When
         val cut = Percolation(initSize)

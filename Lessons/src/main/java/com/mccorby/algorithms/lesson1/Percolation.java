@@ -38,10 +38,11 @@ public class Percolation {
     public Percolation(int n) {
         checkConstructorPrecondition(n);
         size = n;
-        openSites = new boolean[n * n];
-        weightedQuickUnion = new WeightedQuickUnionUF(size * size);
+        int sizeOfArray = (size * size) + 2;
+        openSites = new boolean[sizeOfArray];
+        weightedQuickUnion = new WeightedQuickUnionUF(sizeOfArray);
         topSite = 0;
-        bottomSite = size;
+        bottomSite = (size * size) + 1;
     }
 
     /**
@@ -67,6 +68,12 @@ public class Percolation {
         // Open the site if it is not already open
         if (!isOpen(row, col)) {
             openSites[index] = true;
+            if (isFirstSite(row)) {
+                weightedQuickUnion.union(index, 0);
+            }
+            if (isLastSite(row)) {
+                weightedQuickUnion.union(index, (size * size) + 1);
+            }
             connectToRight(row, col);
             connectToLeft(row, col);
             connectToTop(row, col);
@@ -74,11 +81,19 @@ public class Percolation {
         }
     }
 
+    private boolean isLastSite(int row) {
+        return row == size;
+    }
+
+    private boolean isFirstSite(int row) {
+        return row == 1;
+    }
+
     private void connectToTop(int row, int col) {
         try {
-            int index = getIndexForCoordinates(row, col);
-            int adjacentIndex = getIndexForCoordinates(row - 1 , col);
             if (isOpen(row - 1, col)) {
+                int index = getIndexForCoordinates(row, col);
+                int adjacentIndex = getIndexForCoordinates(row - 1 , col);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
         } catch(IllegalArgumentException iae) {
@@ -88,9 +103,9 @@ public class Percolation {
 
     private void connectToBottom(int row, int col) {
         try {
-            int index = getIndexForCoordinates(row, col);
-            int adjacentIndex = getIndexForCoordinates(row + 1 , col);
             if (isOpen(row + 1, col)) {
+                int index = getIndexForCoordinates(row, col);
+                int adjacentIndex = getIndexForCoordinates(row + 1 , col);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
         } catch(IllegalArgumentException iae) {
@@ -101,9 +116,9 @@ public class Percolation {
 
     private void connectToLeft(int row, int col) {
         try {
-            int index = getIndexForCoordinates(row, col);
-            int adjacentIndex = getIndexForCoordinates(row, col - 1);
             if (isOpen(row, col - 1)) {
+                int index = getIndexForCoordinates(row, col);
+                int adjacentIndex = getIndexForCoordinates(row, col - 1);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
         } catch(IllegalArgumentException iae) {
@@ -113,9 +128,9 @@ public class Percolation {
 
     private void connectToRight(int row, int col) {
         try {
-            int index = getIndexForCoordinates(row, col);
-            int adjacentIndex = getIndexForCoordinates(row, col + 1);
             if (isOpen(row, col + 1)) {
+                int index = getIndexForCoordinates(row, col);
+                int adjacentIndex = getIndexForCoordinates(row, col + 1);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
         } catch(IllegalArgumentException iae) {
@@ -147,11 +162,7 @@ public class Percolation {
      */
     public boolean percolates() {
         // Check that all bottom open sites are connected to top open sites
-        boolean result = true;
-        for (int col = 1; col < size; col++) {
-            result = result && isFull(size, col);
-        }
-        return false;
+        return weightedQuickUnion.connected(topSite, bottomSite);
     }
 
     /**
@@ -170,7 +181,7 @@ public class Percolation {
      * @return
      */
     final int getIndexForCoordinates(int row, int col) {
-        return (row - 1) * size + (col - 1);
+        return (row - 1) * size + col;
     }
 
     final boolean isConnected(int row1, int col1, int row2, int col2) {
