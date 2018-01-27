@@ -79,6 +79,6 @@ hs_err_pid*
 /gradlew.bat
 /.gradle/
 /gradle/
-/build/
+build/
 /src/main/java/percolation/
 /TestingCode/src/

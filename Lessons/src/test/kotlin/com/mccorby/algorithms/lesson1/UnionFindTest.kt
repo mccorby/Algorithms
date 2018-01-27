@@ -1,6 +1,5 @@
 package com.mccorby.algorithms.lesson1
 
-import com.mccorby.algorithms.lesson1.UnionFind
 import org.junit.Assert.*
 import org.junit.Test
 
