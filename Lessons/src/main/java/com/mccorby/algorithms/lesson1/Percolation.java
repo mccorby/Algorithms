@@ -9,9 +9,9 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  * 1. Validate the indices of the site that it receives
  * 2. Mark the site as open.
  * 3. Perform some sequence of WeightedQuickUnionUF operations that links the site in question to its open neighbors
- *    Connect it to all of its adjacent open sites (4 calls if all open).
+ * Connect it to all of its adjacent open sites (4 calls if all open).
  * - System percolates iff top and bottom are connected by open sites
- *
+ * <p>
  * Clever trick. Introduce 2 virtual sites (and connections to top and bottom).
  * Percolates iff virtual top site is connected to virtual bottom site.
  */
@@ -28,11 +28,12 @@ public class Percolation {
      */
     private boolean[] openSites;
 
-    private int topSite;
-    private int bottomSite;
+    private final int topSite;
+    private final int bottomSite;
 
     /**
      * Create n-by-n openSites, with all sites blocked
+     *
      * @param n
      */
     public Percolation(int n) {
@@ -47,6 +48,7 @@ public class Percolation {
 
     /**
      * Is site (row, col) open?
+     *
      * @param row
      * @param col
      * @return
@@ -59,6 +61,7 @@ public class Percolation {
 
     /**
      * Open site (row, col) if it is not open already
+     *
      * @param row
      * @param col
      */
@@ -81,6 +84,14 @@ public class Percolation {
         }
     }
 
+    public int numberOfOpenSites() {
+        int result = 0;
+        for (int i = 0; i < openSites.length; i++) {
+            result++;
+        }
+        return result;
+    }
+
     private boolean isLastSite(int row) {
         return row == size;
     }
@@ -93,10 +104,10 @@ public class Percolation {
         try {
             if (isOpen(row - 1, col)) {
                 int index = getIndexForCoordinates(row, col);
-                int adjacentIndex = getIndexForCoordinates(row - 1 , col);
+                int adjacentIndex = getIndexForCoordinates(row - 1, col);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
-        } catch(IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             // NoOp The adjacent site is out of bounds
         }
     }
@@ -105,10 +116,10 @@ public class Percolation {
         try {
             if (isOpen(row + 1, col)) {
                 int index = getIndexForCoordinates(row, col);
-                int adjacentIndex = getIndexForCoordinates(row + 1 , col);
+                int adjacentIndex = getIndexForCoordinates(row + 1, col);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
-        } catch(IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             // NoOp The adjacent site is out of bounds
         }
     }
@@ -121,7 +132,7 @@ public class Percolation {
                 int adjacentIndex = getIndexForCoordinates(row, col - 1);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
-        } catch(IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             // NoOp The adjacent site is out of bounds
         }
     }
@@ -133,13 +144,14 @@ public class Percolation {
                 int adjacentIndex = getIndexForCoordinates(row, col + 1);
                 weightedQuickUnion.union(index, adjacentIndex);
             }
-        } catch(IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             // NoOp The adjacent site is out of bounds
         }
     }
 
     /**
      * Is site (row, col) full?
+     *
      * @param row
      * @param col
      * @return
@@ -147,17 +159,12 @@ public class Percolation {
     public boolean isFull(int row, int col) {
         checkParamsPreconditions(row, col);
         int index = getIndexForCoordinates(row, col);
-        boolean result = false;
-        for (int i = 0; i < size; i++) {
-            if (isOpen(1, i + 1)) {
-                result = weightedQuickUnion.connected(index, i);
-            }
-        }
-        return result;
+        return weightedQuickUnion.connected(index, 0);
     }
 
     /**
      * Does the system percolate?
+     *
      * @return
      */
     public boolean percolates() {
@@ -167,6 +174,7 @@ public class Percolation {
 
     /**
      * Visible for testing
+     *
      * @return size of the internal openSites
      */
     final int getSize() {
@@ -176,6 +184,7 @@ public class Percolation {
     /**
      * Visible for testing
      * Get the index in 1D for a 2D coordinate
+     *
      * @param row
      * @param col
      * @return
