@@ -2,11 +2,17 @@ package com.mccorby.algorithms.lesson2
 
 class LinkedStack<T>: Iterable<T> {
     private var size: Int = 0
-    private var first: Node<T>? = null
+    private var first: Node = Node.Empty
 
     fun push(item: T) {
-        val oldFirst: Node<T>? = null
-        first = Node(item, oldFirst)
+        first = when (first) {
+            Node.Empty -> {
+                Node.Item(item, Node.Empty)
+            }
+            is Node.Item<*> -> {
+                Node.Item(item, first)
+            }
+        }
         size++
     }
 
@@ -15,35 +21,43 @@ class LinkedStack<T>: Iterable<T> {
     }
 
     fun pop(): T? {
-        val item = first?.item
-        first = first?.next
-        size--
-        return item
+        val aNode = first
+        return when(aNode) {
+            Node.Empty -> null
+            is Node.Item<*> -> {
+                first = aNode.next
+                size--
+                aNode.item as T
+            }
+        }
     }
 
     fun isEmpty(): Boolean {
-        return first == null
+        return first == Node.Empty
     }
 
     override fun iterator(): Iterator<T> {
         return StackIterator(first)
     }
 
-    private class Node<out T>(val item: T, val next: Node<T>?)
+    private sealed class Node {
+        object Empty: Node()
+        class Item<out T>(val item: T, val next: Node): Node()
+    }
 
-    private class StackIterator<out T>(first: Node<T>?): Iterator<T> {
+    private class StackIterator<out T>(first: Node): Iterator<T> {
 
-        private var current: Node<T>? = first
+        private var current: Node = first
 
         override fun hasNext(): Boolean {
-            return current != null
+            return current != Node.Empty
         }
 
         override fun next(): T {
-            val item = current?.item
-            current = current?.next
-            return item!!
+            val aNode: Node.Item<T> = current as Node.Item<T>
+            val item = aNode.item
+            current = aNode.next
+            return item
         }
-
     }
 }
