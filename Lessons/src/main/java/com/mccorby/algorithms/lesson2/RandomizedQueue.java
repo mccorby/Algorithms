@@ -1,21 +1,20 @@
 package com.mccorby.algorithms.lesson2;
 
 import edu.princeton.cs.algs4.StdRandom;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class RandomizeQueue<T> implements Iterable<T> {
+public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private T[] items;
+    private Item[] items;
     private int size;
 
-    public RandomizeQueue() {
-        items = (T[]) new Object[2];
+    public RandomizedQueue() {
+        items = (Item[]) new Object[2];
     }
 
-    public void enqueue(T item) {
+    public void enqueue(Item item) {
         if (item == null) {
             throw new IllegalArgumentException();
         }
@@ -32,13 +31,14 @@ public class RandomizeQueue<T> implements Iterable<T> {
      *
      * @return
      */
-    public T dequeue() {
+    public Item dequeue() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
         int index = StdRandom.uniform(size);
-        T item = items[index];
-        items[index] = null;
+        Item item = items[index];
+        items[index] = items[size - 1];
+        items[size - 1] = null;
         // shrink size of array if necessary
         if ((size - 1) > 0 && (size - 1) == items.length / 4) {
             resize(items.length / 2);
@@ -47,8 +47,7 @@ public class RandomizeQueue<T> implements Iterable<T> {
         return item;
     }
 
-    @NotNull
-    public T sample() {
+    public Item sample() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
@@ -73,7 +72,7 @@ public class RandomizeQueue<T> implements Iterable<T> {
         assert capacity >= size;
 
         // textbook implementation
-        T[] temp = (T[]) new Object[capacity];
+        Item[] temp = (Item[]) new Object[capacity];
         for (int i = 0, j = 0; i < size; i++) {
             if (items[i] != null) {
                 temp[j++] = items[i];
@@ -82,13 +81,12 @@ public class RandomizeQueue<T> implements Iterable<T> {
         items = temp;
     }
 
-    @NotNull
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<Item> iterator() {
         return new QueueIterator();
     }
 
-    private class QueueIterator implements Iterator<T> {
+    private class QueueIterator implements Iterator<Item> {
         private final int[] permutation;
         private int current;
 
@@ -102,8 +100,11 @@ public class RandomizeQueue<T> implements Iterable<T> {
         }
 
         @Override
-        public T next() {
-            T item = items[permutation[current]];
+        public Item next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            Item item = items[permutation[current]];
             current++;
             return item;
         }

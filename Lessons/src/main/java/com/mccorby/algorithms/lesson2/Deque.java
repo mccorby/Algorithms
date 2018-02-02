@@ -1,14 +1,12 @@
 package com.mccorby.algorithms.lesson2;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<T> implements Iterable<T> {
+public class Deque<Item> implements Iterable<Item> {
 
-    private Node<T> first;
-    private Node<T> last;
+    private Node<Item> first;
+    private Node<Item> last;
     private int size;
 
     /**
@@ -34,12 +32,12 @@ public class Deque<T> implements Iterable<T> {
      *
      * @param item
      */
-    public void addFirst(T item) {
+    public void addFirst(Item item) {
         if (item == null) {
             throw new IllegalArgumentException();
         }
 
-        Node node = new Node();
+        Node<Item> node = new Node<>();
         if (first != null) {
             first.prev = node;
         }
@@ -57,12 +55,12 @@ public class Deque<T> implements Iterable<T> {
      *
      * @param item
      */
-    public void addLast(T item) {
+    public void addLast(Item item) {
         if (item == null) {
             throw new IllegalArgumentException();
         }
 
-        Node node = new Node();
+        Node<Item> node = new Node<>();
         node.item = item;
         node.prev = last;
         if (last != null) {
@@ -80,11 +78,11 @@ public class Deque<T> implements Iterable<T> {
      *
      * @return
      */
-    public T removeFirst() {
+    public Item removeFirst() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        T item = first.item;
+        Item item = first.item;
         first = first.next;
         if (first == null) {
             last = null;
@@ -100,12 +98,12 @@ public class Deque<T> implements Iterable<T> {
      *
      * @return
      */
-    public T removeLast() {
+    public Item removeLast() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
 
-        T item = last.item;
+        Item item = last.item;
         last = last.prev;
         if (last == null) {
             first = null;
@@ -116,16 +114,15 @@ public class Deque<T> implements Iterable<T> {
         return item;
     }
 
-    @NotNull
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<Item> iterator() {
         return new DequeIterator<>(first);
     }
 
     private class Node<B> {
         B item;
-        Node next;
-        Node prev;
+        Node<B> next;
+        Node<B> prev;
     }
 
     private class DequeIterator<A> implements Iterator<A> {
@@ -144,6 +141,10 @@ public class Deque<T> implements Iterable<T> {
 
         @Override
         public A next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
             A item = current.item;
             current = current.next;
             return item;

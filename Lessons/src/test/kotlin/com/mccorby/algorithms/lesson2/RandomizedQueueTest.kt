@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
-class RandomizeQueueTest {
+class RandomizedQueueTest {
 
     @Test
     fun `given an empty queue when an item is added it returns size 1`() {
@@ -13,7 +13,7 @@ class RandomizeQueueTest {
         val expected = 1
 
         // When
-        val cut = RandomizeQueue<Int>()
+        val cut = RandomizedQueue<Int>()
         cut.enqueue(1)
         val result = cut.size()
 
@@ -25,7 +25,7 @@ class RandomizeQueueTest {
     fun `given a non-empty queue when an item is dequeue size is decrease by one`() {
         // Given
         val expected = 1
-        val cut = RandomizeQueue<Int>()
+        val cut = RandomizedQueue<Int>()
         cut.enqueue(1)
         cut.enqueue(2)
 
@@ -40,7 +40,7 @@ class RandomizeQueueTest {
     fun `given an empty queue when an item is enqueued then dequeue returns the same item and the queue is empty`() {
         // Given
         val input = 1
-        val cut = RandomizeQueue<Int>()
+        val cut = RandomizedQueue<Int>()
 
         // When
         cut.enqueue(input)
@@ -56,7 +56,7 @@ class RandomizeQueueTest {
         // Given
         val input = 1
         val expectedSize = 1
-        val cut = RandomizeQueue<Int>()
+        val cut = RandomizedQueue<Int>()
 
         // When
         cut.enqueue(input)
@@ -70,7 +70,7 @@ class RandomizeQueueTest {
     @Test
     fun `given a queue with n items when executing n dequeue operations then the size is zero`() {
         // Given
-        val cut = RandomizeQueue<Int>()
+        val cut = RandomizedQueue<Int>()
         cut.enqueue(1)
         cut.enqueue(2)
         cut.enqueue(3)
@@ -87,7 +87,7 @@ class RandomizeQueueTest {
     @Test
     fun `given a queue with n items when executing n dequeue operations all the items are returned`() {
         // Given
-        val cut = RandomizeQueue<Int>()
+        val cut = RandomizedQueue<Int>()
         val expected = setOf(1, 2, 3)
         cut.enqueue(1)
         cut.enqueue(2)
@@ -106,7 +106,7 @@ class RandomizeQueueTest {
     @Test
     fun `given a queue with n items when iterating through the queue all items are returned()`() {
         // Given
-        val cut = RandomizeQueue<Int>()
+        val cut = RandomizedQueue<Int>()
         val expected = setOf(1, 2, 3)
         cut.enqueue(1)
         cut.enqueue(2)

@@ -3,6 +3,9 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
+//apply plugin: 'checkstyle'
+//apply plugin: 'findbugs'
+//apply plugin: 'pmd'
 
 buildscript {
     ext.kotlin_version = '1.2.21'
@@ -35,4 +38,64 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
     testImplementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    checkstyle: "com.puppycrawl.tools:checkstyle:7.5"
+    findbugs  : "com.google.code.findbugs:jsr305:3.0.0"
+
 }
+
+//def staticAnalysisSource = '.'
+//def staticAnalysisIncludeFiles = '**/*.java'
+//
+//task checkstyle(type: Checkstyle) {
+//    description 'Run checkstyle'
+//    group 'verification'
+//    ignoreFailures = false
+//
+//    configFile file("$rootDir/Lessons/quality/checkstyle/checkstyle.xml")
+//    classpath = files()
+//
+//    squalityource staticAnalysisSource
+//    include staticAnalysisIncludeFiles
+//    exclude staticAnalysisExcludeFiles
+//}
+//
+//task findbugs(type: FindBugs, dependsOn:"assembleDebug") {
+//    description 'Run findbugs'
+//    group 'verification'
+//    ignoreFailures = false
+//
+//    classes = fileTree('build/intermediates/classes/debug')
+//    classpath = files()
+//
+//    source staticAnalysisSource
+//    include staticAnalysisIncludeFiles
+//    exclude staticAnalysisExcludeFiles
+//    excludeFilter file("$rootDir/App/quality/findbugs/findbugs_exclude.xml")
+//
+//    effort = 'max'
+//
+//    reports {
+//        xml.enabled = rootProject.ext.isCIBuild ? true : false
+//        html.enabled = rootProject.ext.isCIBuild ? false : true
+//    }
+//}
+//
+//task pmd(type: Pmd) {
+//    description 'Run pmd'
+//    group 'verification'
+//    ignoreFailures = false
+//
+//    ruleSetFiles = files("$rootDir/App/quality/pmd/ethan_pmd.xml")
+//    ruleSets = []
+//    rulePriority = 4
+//
+//    source staticAnalysisSource
+//    include staticAnalysisIncludeFiles
+//    exclude staticAnalysisExcludeFiles
+//
+//    reports {
+//        xml.enabled = true
+//        html.enabled = true
+//    }
+//}
