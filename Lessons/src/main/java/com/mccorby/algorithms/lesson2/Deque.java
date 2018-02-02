@@ -38,7 +38,11 @@ public class Deque<T> implements Iterable<T> {
         if (item == null) {
             throw new IllegalArgumentException();
         }
+
         Node node = new Node();
+        if (first != null) {
+            first.prev = node;
+        }
         node.item = item;
         node.next = first;
         size++;
@@ -60,11 +64,12 @@ public class Deque<T> implements Iterable<T> {
 
         Node node = new Node();
         node.item = item;
+        node.prev = last;
         if (last != null) {
             last.next = node;
         }
-        size++;
         last = node;
+        size++;
         if (size == 1) {
             first = last;
         }
@@ -81,6 +86,11 @@ public class Deque<T> implements Iterable<T> {
         }
         T item = first.item;
         first = first.next;
+        if (first == null) {
+            last = null;
+        } else {
+            first.prev = null;
+        }
         size--;
         return item;
     }
@@ -96,7 +106,12 @@ public class Deque<T> implements Iterable<T> {
         }
 
         T item = last.item;
-        last.next = last;
+        last = last.prev;
+        if (last == null) {
+            first = null;
+        } else {
+            last.next = null;
+        }
         size--;
         return item;
     }
@@ -110,6 +125,7 @@ public class Deque<T> implements Iterable<T> {
     private class Node<B> {
         B item;
         Node next;
+        Node prev;
     }
 
     private class DequeIterator<A> implements Iterator<A> {

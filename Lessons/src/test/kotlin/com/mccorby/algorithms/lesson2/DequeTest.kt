@@ -2,6 +2,7 @@ package com.mccorby.algorithms.lesson2
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 internal class DequeTest {
 
@@ -84,5 +85,22 @@ internal class DequeTest {
 
         // Then
         assertEquals(expected, result.toString())
+    }
+
+    @Test
+    fun `Given the deque has elements when all are removed then it says it is empty`() {
+        // Given
+        val cut = Deque<Int>()
+        cut.addFirst(1)
+        cut.addFirst(2)
+        cut.addFirst(3)
+
+        // When
+        cut.removeLast()
+        cut.removeFirst()
+        cut.removeLast()
+
+        // Then
+        assertTrue(cut.isEmpty)
     }
 }
