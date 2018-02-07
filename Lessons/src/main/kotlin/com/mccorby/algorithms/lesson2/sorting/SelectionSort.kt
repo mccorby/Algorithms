@@ -8,7 +8,8 @@ package com.mccorby.algorithms.lesson2.sorting
  * ・Entries the left of ↑ (including ↑) fixed and in ascending order.
  * ・No entry to right of ↑ is smaller than any entry to the left of ↑.
  *
- *
+ * Selection sort uses (N– 1) + (N– 2) + ... + 1 + 0 ~ N^2 / 2 compares and N exchanges.
+ * Quadratic time, even if input is sorted
  */
 class SelectionSort: BasicSorting() {
 
