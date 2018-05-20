@@ -1,7 +1,7 @@
 package com.mccorby.algorithms.lesson2
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 
 class BinaryConversorTest {

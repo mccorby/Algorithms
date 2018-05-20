@@ -1,5 +1,8 @@
 package com.mccorby.algorithms.lesson2.sorting
 
+import com.mccorby.algorithms.exch
+import com.mccorby.algorithms.less
+
 /**
  * In iteration i, swap a[i] with each larger entry to its left
  *

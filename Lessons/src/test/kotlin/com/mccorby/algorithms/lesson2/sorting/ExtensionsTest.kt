@@ -1,9 +1,10 @@
 package com.mccorby.algorithms.lesson2.sorting
 
+import com.mccorby.algorithms.exch
+import com.mccorby.algorithms.isSorted
+import com.mccorby.algorithms.less
+import org.junit.Assert.*
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class ExtensionsTest {
 

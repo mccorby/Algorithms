@@ -1,8 +1,8 @@
 package com.mccorby.algorithms.lesson2.sorting
 
-import kotlin.test.Test
-import kotlin.test.assertTrue
-
+import com.mccorby.algorithms.isSorted
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 internal abstract class BasicSortingTest {
 

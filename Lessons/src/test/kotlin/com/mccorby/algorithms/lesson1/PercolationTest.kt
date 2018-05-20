@@ -1,10 +1,8 @@
 package com.mccorby.algorithms.lesson1
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 import java.lang.IllegalArgumentException
-import kotlin.test.assertEquals
 
 internal class PercolationTest {
 
