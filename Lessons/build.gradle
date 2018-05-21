@@ -39,8 +39,8 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
     testImplementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    checkstyle: "com.puppycrawl.tools:checkstyle:7.5"
-    findbugs  : "com.google.code.findbugs:jsr305:3.0.0"
+//    checkstyle: "com.puppycrawl.tools:checkstyle:7.5"
+//    findbugs  : "com.google.code.findbugs:jsr305:3.0.0"
 
 }
 
