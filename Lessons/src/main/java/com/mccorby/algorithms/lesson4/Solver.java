@@ -1,9 +1,17 @@
 package com.mccorby.algorithms.lesson4;
 
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
+
 public class Solver {
+
+    private MinPQ<Board> pq;
+    private int moves = 0;
+    private Board predecessor;
+    private ArrayList<Board> solution;
 
     /**
      * Find a solution to the initial board (using the A* algorithm)
@@ -11,7 +19,13 @@ public class Solver {
      * @param initial
      */
     public Solver(Board initial) {
-
+        if (initial == null) {
+            throw new IllegalArgumentException("Initial board must not be null");
+        }
+        pq = new MinPQ<>();
+        pq.insert(initial);
+        predecessor = null;
+        solve();
     }
 
     /**
@@ -20,7 +34,7 @@ public class Solver {
      * @return
      */
     public boolean isSolvable() {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +43,7 @@ public class Solver {
      * @return
      */
     public int moves() {
-        return 0;
+        return moves;
     }
 
 
@@ -39,7 +53,26 @@ public class Solver {
      * @return
      */
     public Iterable<Board> solution() {
-        return null;
+        return solution;
+    }
+
+    private void solve() {
+        solution = new ArrayList<>();
+        Board board = pq.delMin();
+        while (!board.isGoal()) {
+            solution.add(board);
+            predecessor = board;
+            moves++;
+            for (Board neighbour: board.neighbors()) {
+                if (!neighbour.equals(predecessor)) {
+                    pq.insert(neighbour);
+                }
+            }
+            board = pq.delMin();
+        }
+        if (board.isGoal()) {
+            solution.add(board);
+        }
     }
 
     public static void main(String[] args) {

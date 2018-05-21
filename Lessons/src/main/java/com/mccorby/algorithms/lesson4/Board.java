@@ -1,9 +1,11 @@
 package com.mccorby.algorithms.lesson4;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board {
+public class Board implements Comparable<Board> {
 
     private int[] blocks;
     private int manhattanDistance = -1;
@@ -124,7 +126,7 @@ public class Board {
         int[][] newBlocks = new int[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                newBlocks[i][j] = blocks[i * j + j];
+                newBlocks[i][j] = blocks[fromMatrixPosition(i, j)];
             }
         }
         return newBlocks;
@@ -221,10 +223,24 @@ public class Board {
     }
 
     public String toString() {
-        return null;
+        int dimension = dimension();
+        StringBuffer sb = new StringBuffer();
+        sb.append(dimension).append("\n");
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                sb.append(blocks[fromMatrixPosition(i, j)]).append(" ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     public static void main(String[] args) {
 
+    }
+
+    @Override
+    public int compareTo(@NotNull Board o) {
+        return this.manhattan() - o.manhattan();
     }
 }
