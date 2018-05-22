@@ -1,13 +1,12 @@
 package com.mccorby.algorithms.lesson4;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board implements Comparable<Board> {
+public class Board {
 
-    private int[] blocks;
+    private final int[] blocks;
+    private final int dimension;
     private int manhattanDistance = -1;
 
     private int zeroPosition = -1;
@@ -19,6 +18,7 @@ public class Board implements Comparable<Board> {
      * @param blocks
      */
     public Board(int[][] blocks) {
+        dimension = blocks[0].length;
         this.blocks = new int[blocks.length * blocks.length];
         for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks.length; j++) {
@@ -30,14 +30,14 @@ public class Board implements Comparable<Board> {
             }
         }
     }
-
+    
     /**
      * Board dimension n
      *
      * @return
      */
     public int dimension() {
-        return (int) Math.sqrt(blocks.length);
+        return dimension;
     }
 
     /**
@@ -63,7 +63,6 @@ public class Board implements Comparable<Board> {
     public int manhattan() {
         if (manhattanDistance == -1) {
             manhattanDistance = 0;
-            int dimension = dimension();
             for (int i = 0; i < blocks.length; i++) {
                 int value = blocks[i];
                 if (value != 0) {
@@ -84,13 +83,13 @@ public class Board implements Comparable<Board> {
 
     private int[] toMatrixPosition(int position) {
         int[] matrixPosition = new int[2];
-        matrixPosition[0] = position / dimension();
-        matrixPosition[1] = position % dimension();
+        matrixPosition[0] = position / dimension;
+        matrixPosition[1] = position % dimension;
         return matrixPosition;
     }
 
     private int fromMatrixPosition(int row, int col) {
-        return row * dimension() + col;
+        return row * dimension + col;
     }
 
     /**
@@ -122,7 +121,6 @@ public class Board implements Comparable<Board> {
     }
 
     private int[][] createNewBlocks() {
-        int dimension = dimension();
         int[][] newBlocks = new int[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -166,7 +164,7 @@ public class Board implements Comparable<Board> {
         if (y == null || getClass() != y.getClass()) return false;
 
         Board board = (Board) y;
-        if (board.dimension() != dimension()) return false;
+        if (board.dimension != dimension) return false;
 
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i] != board.blocks[i]) {
@@ -182,6 +180,11 @@ public class Board implements Comparable<Board> {
      * @return
      */
     public Iterable<Board> neighbors() {
+        for (int i = 0; i < blocks.length; i++)    // search for empty block
+            if (blocks[i] == 0) {
+                zeroPosition = i;
+                break;
+            }
         List<Board> neighborList = new ArrayList<>();
         int[] zeroInMatrix = toMatrixPosition(zeroPosition);
         // Swap with above block
@@ -193,7 +196,7 @@ public class Board implements Comparable<Board> {
             neighborList.add(createNeighbour(zeroInMatrix, swapElementRow, swapElementCol));
         }
         // Swap with block below
-        if (zeroInMatrix[0] != dimension() - 1) {
+        if (zeroInMatrix[0] != dimension - 1) {
             swapElementRow = zeroInMatrix[0] + 1;
             swapElementCol = zeroInMatrix[1];
             neighborList.add(createNeighbour(zeroInMatrix, swapElementRow, swapElementCol));
@@ -205,7 +208,7 @@ public class Board implements Comparable<Board> {
             neighborList.add(createNeighbour(zeroInMatrix, swapElementRow, swapElementCol));
         }
         // Swap with block to the right
-        if (zeroInMatrix[1] != dimension() - 1) {
+        if (zeroInMatrix[1] != dimension - 1) {
             swapElementRow = zeroInMatrix[0];
             swapElementCol = zeroInMatrix[1] + 1;
             neighborList.add(createNeighbour(zeroInMatrix, swapElementRow, swapElementCol));
@@ -223,8 +226,7 @@ public class Board implements Comparable<Board> {
     }
 
     public String toString() {
-        int dimension = dimension();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(dimension).append("\n");
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -233,14 +235,5 @@ public class Board implements Comparable<Board> {
             sb.append("\n");
         }
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-
-    }
-
-    @Override
-    public int compareTo(@NotNull Board o) {
-        return this.manhattan() - o.manhattan();
     }
 }

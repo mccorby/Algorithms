@@ -5,13 +5,38 @@ import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class Solver {
 
-    private MinPQ<Board> pq;
-    private int moves = 0;
-    private Board predecessor;
-    private ArrayList<Board> solution;
+    private boolean canBeSolved;
+    private SearchNode solutionNode;
+
+    /**
+     * A search node consists of the board, number of moves to reach
+     */
+    private class SearchNode {
+        private int moves;
+        private final Board board;
+        private SearchNode predecessor;
+
+        public SearchNode(Board initial) {
+            moves = 0;
+            predecessor = null;
+            board = initial;
+        }
+    }
+
+    private class PriorityOrder implements Comparator<SearchNode> {
+
+        @Override
+        public int compare(SearchNode o1, SearchNode o2) {
+            int priority1 = o1.board.manhattan() + o1.moves;
+            int priority2 = o2.board.manhattan() + o2.moves;
+            return Integer.compare(priority1, priority2);
+        }
+    }
 
     /**
      * Find a solution to the initial board (using the A* algorithm)
@@ -22,10 +47,7 @@ public class Solver {
         if (initial == null) {
             throw new IllegalArgumentException("Initial board must not be null");
         }
-        pq = new MinPQ<>();
-        pq.insert(initial);
-        predecessor = null;
-        solve();
+        solve(initial);
     }
 
     /**
@@ -34,7 +56,7 @@ public class Solver {
      * @return
      */
     public boolean isSolvable() {
-        return true;
+        return canBeSolved;
     }
 
     /**
@@ -43,7 +65,7 @@ public class Solver {
      * @return
      */
     public int moves() {
-        return moves;
+        return solutionNode != null ? solutionNode.moves : -1;
     }
 
 
@@ -53,25 +75,52 @@ public class Solver {
      * @return
      */
     public Iterable<Board> solution() {
-        return solution;
+        if (isSolvable()) {
+            List<Board> result = new ArrayList<>();
+            for (SearchNode node = solutionNode; node != null; node = node.predecessor) {
+                result.add(node.board);
+            }
+            return result;
+        } else {
+            return null;
+        }
     }
 
-    private void solve() {
-        solution = new ArrayList<>();
-        Board board = pq.delMin();
-        while (!board.isGoal()) {
-            solution.add(board);
-            predecessor = board;
-            moves++;
-            for (Board neighbour: board.neighbors()) {
-                if (!neighbour.equals(predecessor)) {
-                    pq.insert(neighbour);
+    private void solve(Board initial) {
+        MinPQ<SearchNode> pq = new MinPQ<>(new PriorityOrder());
+        pq.insert(new SearchNode(initial));
+
+        SearchNode searchNode = pq.delMin();
+        SearchNode twinNode = new SearchNode(searchNode.board.twin());
+
+        MinPQ<SearchNode> twinPQ = new MinPQ<>(new PriorityOrder());
+        twinPQ.insert(twinNode);
+        SearchNode twin = twinPQ.delMin();
+
+        while (!searchNode.board.isGoal() && !twin.board.isGoal()) {
+            for (Board neighbour : searchNode.board.neighbors()) {
+                if (searchNode.predecessor == null || !neighbour.equals(searchNode.predecessor.board)) {
+                    SearchNode sn = new SearchNode(neighbour);
+                    sn.moves = searchNode.moves + 1;
+                    sn.predecessor = searchNode;
+                    pq.insert(sn);
                 }
             }
-            board = pq.delMin();
+            searchNode = pq.delMin();
+
+            for (Board neighbour : twin.board.neighbors()) {
+                if (twin.predecessor == null || !neighbour.equals(twin.predecessor.board)) {
+                    SearchNode sn = new SearchNode(neighbour);
+                    sn.moves = twin.moves + 1;
+                    sn.predecessor = twin;
+                    twinPQ.insert(sn);
+                }
+            }
+            twin = twinPQ.delMin();
         }
-        if (board.isGoal()) {
-            solution.add(board);
+        if (searchNode.board.isGoal()) {
+            canBeSolved = true;
+            solutionNode = searchNode;
         }
     }
 
