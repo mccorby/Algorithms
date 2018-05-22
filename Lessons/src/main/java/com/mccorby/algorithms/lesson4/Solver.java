@@ -2,11 +2,10 @@ package com.mccorby.algorithms.lesson4;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class Solver {
 
@@ -76,9 +75,9 @@ public class Solver {
      */
     public Iterable<Board> solution() {
         if (isSolvable()) {
-            List<Board> result = new ArrayList<>();
+            Stack<Board> result = new Stack<>();
             for (SearchNode node = solutionNode; node != null; node = node.predecessor) {
-                result.add(node.board);
+                result.push(node.board);
             }
             return result;
         } else {
